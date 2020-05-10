@@ -1,0 +1,169 @@
+﻿@model IEnumerable<Category>
+
+
+<h1>Total Categories: @Model.Count()</h1>
+
+    <div class="row">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Short Description
+                    </th>
+                    <th>
+                        Long Description
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Category C in Model)
+                {
+                    @*if (C.Status == "Active")
+                    {
+                        <tr>
+                            <td>
+                                @C.Id
+                            </td>
+                            <td>
+                                @C.Name
+                            </td>
+                            <td>
+                                @C.ShortDescription
+                            </td>
+                            <td>
+                                @C.LongDescription
+                            </td>
+                            <td>
+                                @C.Status
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="table-danger">
+                            <td>
+                                @C.Id
+                            </td>
+                            <td>
+                                @C.Name
+                            </td>
+                            <td>
+                                @C.ShortDescription
+                            </td>
+                            <td>
+                                @C.LongDescription
+                            </td>
+                            <td>
+                                @C.Status
+                            </td>
+                        </tr>
+                    }*@
+
+
+
+
+
+                    string StatusClass = "";
+
+                    if (C.Status != "Active")
+                    {
+                        StatusClass = "table-danger";
+                    }
+
+
+                    <tr class="@StatusClass">
+                        <td>
+                            @C.Id
+                        </td>
+                        <td>
+                            @C.Name
+                        </td>
+                        <td>
+                            @C.ShortDescription
+                        </td>
+                        <td>
+                            @C.LongDescription
+                        </td>
+                        <td>
+                            @C.Status
+                        </td>
+                        <td>
+
+                            <a href="/Category/Detail?Id=@C.Id" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> </a>
+                            <a href="/Category/Edit?Id=@C.Id" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> </a>
+                            <a href="/Category/Delete?Id=@C.Id" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  </a>
+
+
+
+                        </td>
+                    </tr>
+
+
+
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+
+<div class="row">
+    @foreach (Category C in Model)
+    {
+        <div class="col-md-6">
+            <div class="card mb-4 border-primary">
+                <div class="card-header">
+
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h4 class="card-title">@C.Name</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <span class="badge badge-success float-right">@C.Id</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            @*<img src="http://placehold.it/100x100/" alt="" />*@
+
+                            <img src="http://lorempixel.com/100/100/sports" alt="" />
+                                                       
+                        </div>
+                        <div class="col-md-8">
+                            <p class="card-text">
+                                @C.ShortDescription
+                            </p>
+                            <p class="card-text">
+                                @C.LongDescription
+                            </p>
+                        </div>
+                    </div>
+
+
+                    
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/Category/Detail?Id=@C.Id" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> </a>
+                    <a href="/Category/Edit?Id=@C.Id" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> </a>
+                    <a href="/Category/Delete?Id=@C.Id" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  </a>
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
