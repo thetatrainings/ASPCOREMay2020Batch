@@ -23,7 +23,7 @@ namespace L9.Models
 //            if (!optionsBuilder.IsConfigured)
 //            {
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseSqlServer("Server=LENOVO\\SQLEXPRESS;Database=Ramadan2020;User ID=sa; Password=theta;Trusted_Connection=True;");
+//                optionsBuilder.UseSqlServer("Server=LENOVO\\SQLEXPRESS;Database=Ramadan2020;Trusted_Connection=True;User ID=sa; Password=theta;");
 //            }
 //        }
 
@@ -37,27 +37,35 @@ namespace L9.Models
 
                 entity.Property(e => e.CreatedBy)
                     .HasColumnName("created_by")
-                    .HasColumnType("text");
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDate)
                     .HasColumnName("created_date")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.Image)
+                    .HasColumnName("image")
+                    .HasMaxLength(200);
+
                 entity.Property(e => e.LongDescription)
                     .HasColumnName("long_description")
-                    .HasColumnType("text");
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
-                    .HasColumnType("text");
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.ShortDescription)
                     .HasColumnName("short_description")
-                    .HasColumnType("text");
+                    .HasMaxLength(300);
 
                 entity.Property(e => e.Status)
                     .HasColumnName("status")
-                    .HasColumnType("text");
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Tags)
+                    .HasColumnName("tags")
+                    .HasMaxLength(500);
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -66,9 +74,11 @@ namespace L9.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.CategoryId).HasColumnName("category_id");
+
                 entity.Property(e => e.CreatedBy)
                     .HasColumnName("created_by")
-                    .HasColumnType("text");
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDate)
                     .HasColumnName("created_date")
@@ -78,29 +88,35 @@ namespace L9.Models
 
                 entity.Property(e => e.Images)
                     .HasColumnName("images")
-                    .HasColumnType("text");
+                    .HasMaxLength(1000);
 
                 entity.Property(e => e.LongDescription)
                     .HasColumnName("long_description")
-                    .HasColumnType("text");
+                    .HasMaxLength(1000);
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
-                    .HasColumnType("text");
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.OnSale).HasColumnName("on_sale");
 
                 entity.Property(e => e.Price).HasColumnName("price");
 
                 entity.Property(e => e.ShortDescription)
                     .HasColumnName("short_description")
-                    .HasColumnType("text");
+                    .HasMaxLength(300);
 
                 entity.Property(e => e.Sku)
                     .HasColumnName("sku")
-                    .HasColumnType("text");
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Status)
                     .HasColumnName("status")
-                    .HasColumnType("text");
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ExtraFeatures)
+                   .HasColumnName("extra_features")
+                   .HasMaxLength(500);
             });
 
             OnModelCreatingPartial(modelBuilder);

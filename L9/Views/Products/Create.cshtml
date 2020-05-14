@@ -1,11 +1,5 @@
 ﻿@model L9.Models.Product
 
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h1>Create</h1>
-
 <h4>Product</h4>
 <hr />
 <div class="row">
@@ -28,29 +22,76 @@
                 <span asp-validation-for="LongDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sku" class="control-label"></label>
-                <input asp-for="Sku" class="form-control" />
-                <span asp-validation-for="Sku" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CurrentStock" class="control-label"></label>
-                <input asp-for="CurrentStock" class="form-control" />
-                <span asp-validation-for="CurrentStock" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                @*<select asp-for="Status" class="form-control">
+                    <option value="">Please Select Status</option>
+                    <option value="Active">Active</option>
+                    <option value="InActive">InActive</option>
+                </select>*@
+
+
+                @{ 
+
+                    IList<SelectListItem> SLI = new List<SelectListItem>();
+
+                    SelectListItem oSLI = new SelectListItem();
+                    oSLI.Text = "Active";
+                    oSLI.Value = "Active";
+
+                    SelectListItem o2SLI = new SelectListItem();
+                    o2SLI.Text = "InActive";
+                    o2SLI.Value = "InActive";
+
+                    SLI.Add(oSLI);
+                    SLI.Add(o2SLI);
+                }
+
+
+               @* @Html.DropDownList("Status",SLI,"Please Select", new { @class = "form-control" })*@
+
+            <div class="radio">
+                <label>
+                    <input type="radio" value="Active" asp-for="Status" checked> Active
+                </label>
+
+                <label>
+                    <input type="radio" value="InActive" asp-for="Status"> InActive
+                </label>
+            </div>
+
+            @*<div class="checkbox">
+                <label>
+                    <input type="checkbox" id="WaterProof" name="WaterProof"> WaterProof
+                </label>
+
+                <label>
+                    <input type="checkbox" id="Washable" name="Washable"> Washable
+                </label>
+
+            </div>*@
+
+
+
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Images" class="control-label"></label>
-                <input asp-for="Images" class="form-control" />
-                <span asp-validation-for="Images" class="text-danger"></span>
+                <label asp-for="CategoryId" class="control-label"></label>
+               
+                @{ 
+
+                    IList<Category> AllCategories = ViewBag.AC;
+
+                    SelectList SL = new SelectList(AllCategories,"Id","Name");
+                    
+
+                    
+                }
+
+               @* @Html.DropDownListFor(a=>a.Status,new SelectListItem<,"test option label",null)*@
+
+                @Html.DropDownList("CategoryId", SL,"Please Select Cateogry",new { @class= "form-control" })
+
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CreatedDate" class="control-label"></label>
@@ -61,6 +102,36 @@
                 <label asp-for="CreatedBy" class="control-label"></label>
                 <input asp-for="CreatedBy" class="form-control" />
                 <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Images" class="control-label"></label>
+                <input asp-for="Images" class="form-control" />
+                <span asp-validation-for="Images" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentStock" class="control-label"></label>
+                <input asp-for="CurrentStock" class="form-control" />
+                <span asp-validation-for="CurrentStock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sku" class="control-label"></label>
+                <input asp-for="Sku" class="form-control" />
+                <span asp-validation-for="Sku" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OnSale" class="control-label"></label>
+                <input asp-for="OnSale" class="form-control" />
+                <span asp-validation-for="OnSale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExtraFeatures" class="control-label"></label>
+                <input asp-for="ExtraFeatures" class="form-control" />
+                <span asp-validation-for="ExtraFeatures" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

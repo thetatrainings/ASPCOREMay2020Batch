@@ -45,6 +45,7 @@ namespace L9.Controllers
             {
                 ORM.Category.Remove(C);
                 ORM.SaveChanges();
+                TempData["Message"] = C.Name + " deleted successfully!";
                 return RedirectToAction("AllCategories");
             }
 
@@ -87,9 +88,21 @@ namespace L9.Controllers
         }
 
 
-        public IActionResult AllCategories()
-        {       
-            return View(ORM.Category.ToList<Category>());
+        public IActionResult AllCategories(string SearchQuery)
+        {
+            if (TempData["Message"] != null)
+            {
+                ViewBag.Message = TempData["Message"].ToString();
+            }
+
+            if (string.IsNullOrEmpty(SearchQuery))
+            {
+                return View(ORM.Category.ToList<Category>());
+            }
+            else
+            {
+                return View(ORM.Category.Where(a=>a.Name.Contains(SearchQuery)).ToList<Category>());
+            }
         }
 
         [HttpGet]
@@ -121,6 +134,29 @@ namespace L9.Controllers
 
             return RedirectToAction("AllCategories");
         }
+
+
+        public string LoadAd1()
+        {
+
+            System.Threading.Thread.Sleep(5000);
+
+            string Ad1 = "<iframe width = '560' height = '315' src = 'https://www.youtube.com/embed/KW-bqPDTY2k' frameborder = '0' allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' allowfullscreen ></iframe>";
+
+            return Ad1;
+        }
+
+
+        public string LoadAd2()
+        {
+
+            System.Threading.Thread.Sleep(10000);
+
+            string Ad1 = "<iframe width = '560' height = '315' src = 'https://www.youtube.com/embed/KW-bqPDTY2k' frameborder = '0' allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' allowfullscreen ></iframe>";
+
+            return Ad1;
+        }
+
 
     }
 }

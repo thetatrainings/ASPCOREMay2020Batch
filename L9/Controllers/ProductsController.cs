@@ -47,6 +47,10 @@ namespace L9.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+
+            IList<Category> AllCategories =  _context.Category.ToList<Category>();
+
+            ViewBag.AC = AllCategories;
             return View();
         }
 
@@ -55,7 +59,7 @@ namespace L9.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ShortDescription,LongDescription,Price,Sku,CurrentStock,Status,Images,CreatedDate,CreatedBy")] Product product)
+        public async Task<IActionResult> Create(Product product)
         {
             if (ModelState.IsValid)
             {
