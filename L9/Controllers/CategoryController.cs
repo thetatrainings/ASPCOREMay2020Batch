@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using L9.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace L9.Controllers
@@ -53,6 +54,14 @@ namespace L9.Controllers
         }
 
 
+        //public IActionResult Login(string UName, string Pwd)
+        //{
+        //  User U =   ORM.SystemUsers.Where(abc.UName == UName && abc.Pwd == Pwd).firstordefault();
+
+        //    if(U!=null)
+        //        return
+        //}
+
 
         [HttpGet]
         public IActionResult Create()
@@ -77,6 +86,10 @@ namespace L9.Controllers
 
                 ViewBag.Message = C.Name + " Category successfully Saved.";
 
+
+                HttpContext.Session.SetString("CName",C.Name);
+
+               
             }
             else
             {
@@ -155,6 +168,33 @@ namespace L9.Controllers
             string Ad1 = "<iframe width = '560' height = '315' src = 'https://www.youtube.com/embed/KW-bqPDTY2k' frameborder = '0' allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' allowfullscreen ></iframe>";
 
             return Ad1;
+        }
+
+
+        public string DeleteAjax(int id)
+        {
+            try
+            {
+                Category C = ORM.Category.Find(id);
+
+                if (C != null)
+                {
+                    ORM.Category.Remove(C);
+                    ORM.SaveChanges();
+                    return "1";
+                }
+            }
+            catch
+            {
+                return "0";
+            }
+            finally
+            {
+
+            }
+
+
+            return "0";
         }
 
 

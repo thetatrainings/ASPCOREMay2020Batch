@@ -37,6 +37,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="AllCategories">Show All Categories</a>
                         </li>
                     </ul>
+
+                    <span>
+                        Welcome: @Context.Session.GetString("CName")
+                    </span>
                 </div>
             </div>
         </nav>

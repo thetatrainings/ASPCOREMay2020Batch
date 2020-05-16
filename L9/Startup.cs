@@ -44,6 +44,9 @@ namespace L9
             services.AddRazorPages();
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            services.AddSession();
+            services.AddDistributedMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +70,7 @@ namespace L9
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseBrowserLink();
 
             app.UseEndpoints(endpoints =>

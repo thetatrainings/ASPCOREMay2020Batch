@@ -135,7 +135,7 @@
                         <a href="/Category/Detail?Id=@C.Id" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> </a>
                         <a href="/Category/Edit?Id=@C.Id" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> </a>
                         <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal-@C.Id"><i class="fa fa-trash"></i> </a>
-                       
+
                         <div class="modal fade" id='myModal-@C.Id' tabindex="-1" role="dialog" aria-labelledby="myModal-label-@C.Id">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -156,6 +156,8 @@
                         </div>
 
 
+
+                        <a href="#"   data-cid="@C.Id" class="btn btn-danger btn-sm deletebutton"><i class="fa fa-trash"></i> Delete</a>
                     </td>
                 </tr>
 
@@ -251,6 +253,55 @@
             $('#ForAd1').load('/Category/LoadAd1');
 
             $('#ForAd2').load('/Category/LoadAd2');
+
+
+            $('.deletebutton').click(function () {
+
+                var dbutton = $(this);
+                var CategoryIdToDelete = dbutton.data('cid');
+
+                //alert(CategoryIdToDelete);
+
+
+
+                $.ajax({
+
+                    beforeSend: function () {
+                        dbutton.addClass('disabled');
+                        dbutton.html("<i class='fa fa-trash'></i> Please Wait ...")
+
+                    },
+                    url: '/Category/DeleteAjax',
+                    type: 'POST',
+                    data: {
+                        id: CategoryIdToDelete
+                    },
+                    success: function (datareturned) {
+                        if (datareturned == '1') {
+                            // alert('Category successfully deleted.');
+
+                            dbutton.parent().parent().addClass('table-danger').fadeOut(5000);
+
+                        }
+                        else {
+                            //alert('Could not delete this category.');
+                        }
+
+                    },
+                    error: function (errordetails) {
+                        alert(errordetails);
+                    },
+                    complete: function () {
+                        dbutton.removeClass('disabled');}
+                    
+
+
+
+                });
+
+
+            });
+
 
         });
     </script>
