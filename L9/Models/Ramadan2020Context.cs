@@ -17,15 +17,16 @@ namespace L9.Models
 
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<SystemUser> SystemUser { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseSqlServer("Server=LENOVO\\SQLEXPRESS;Database=Ramadan2020;Trusted_Connection=True;User ID=sa; Password=theta;");
-//            }
-//        }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+        //                optionsBuilder.UseSqlServer("Server=LENOVO\\SQLEXPRESS;Database=Ramadan2020;Trusted_Connection=True;User ID=sa; Password=theta;");
+        //            }
+        //        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -119,6 +120,34 @@ namespace L9.Models
                    .HasMaxLength(500);
             });
 
+            modelBuilder.Entity<SystemUser>(entity =>
+            {
+                entity.ToTable("system_user");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Username)
+                    .HasColumnName("username")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Password)
+                    .HasColumnName("password")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.DisplayName)
+                    .HasColumnName("display_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Role)
+                    .HasColumnName("role")
+                    .HasMaxLength(50);
+
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("status")
+                    .HasMaxLength(50);
+
+            });
             OnModelCreatingPartial(modelBuilder);
         }
 

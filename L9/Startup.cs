@@ -77,7 +77,7 @@ namespace L9
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Category}/{action=Create}/{id?}");
+                    pattern: "{controller=SystemUsers}/{action=Login}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
