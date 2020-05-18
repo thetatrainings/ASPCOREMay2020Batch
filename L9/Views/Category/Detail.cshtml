@@ -9,8 +9,16 @@
 
         <div class="col-md-4">
 
+            @if (string.IsNullOrEmpty(Model.Image))
+            {
+                <img src="~/Images/CategoryImages/ph.png" class="img-fluid img-thumbnail" alt="" />
 
-            <img src="http://lorempixel.com/500/500/sports" class="img-fluid img-thumbnail" alt="" />
+            }
+            else
+            {
+                <img src="~/Images/CategoryImages/@Model.Image" class="img-fluid img-thumbnail" alt="" />
+
+            }
 
         </div>
         <div class="col-md-8">

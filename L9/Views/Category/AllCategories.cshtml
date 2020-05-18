@@ -39,7 +39,7 @@
         <thead>
             <tr>
                 <th>
-                    ID
+                    Image
                 </th>
                 <th>
                     Name
@@ -116,7 +116,14 @@
 
                 <tr class="@StatusClass">
                     <td>
-                        @C.Id
+                        @if (string.IsNullOrEmpty(C.Image))
+                        {
+                            <img src="~/Images/CategoryImages/ph.png" class="img-fluid" style="max-width:80px;" />
+                        }
+                        else
+                        {
+                            <img src="~/Images/CategoryImages/@C.Image"  class="img-fluid" style="max-width:80px;" />
+                        }
                     </td>
                     <td>
                         @C.Name

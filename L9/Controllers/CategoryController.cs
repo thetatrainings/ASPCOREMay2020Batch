@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using L9.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations.Design;
+using Microsoft.Extensions.Hosting;
 
 namespace L9.Controllers
 {
     public class CategoryController : Controller
     {
         private readonly Ramadan2020Context ORM = null;
-
-        public CategoryController(Ramadan2020Context _ORM)
+        private readonly IHostEnvironment ENV = null;
+        public CategoryController(Ramadan2020Context _ORM, IHostEnvironment _ENV)
         {
             ORM = _ORM;
+            ENV = _ENV;
         }
 
 
@@ -71,14 +75,44 @@ namespace L9.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,ShortDescription,LongDescription")] Category C)
+        public async Task<IActionResult> Create([Bind("Name,ShortDescription,LongDescription")] Category C, IFormFile CImage)
         {
+            string FileName = "";
+
+            if (CImage != null)
+            {
+                string FTPFolderPath = ENV.ContentRootPath + "\\wwwroot\\Images\\CategoryImages";
+
+                string FileExt = Path.GetExtension(CImage.FileName);
+
+                FileName = Guid.NewGuid() + FileExt;
+                string FinalFilePath = FTPFolderPath + "\\" + FileName;
+
+
+
+
+
+                FileStream FS = new FileStream(FinalFilePath, FileMode.Create);
+
+                CImage.CopyTo(FS);
+
+            }
+
+
+
+           // CImage.CopyTo(new FileStream(ENV.ContentRootPath + "\\wwwroot\\Images\\CategoryImages\\" + Guid.NewGuid() + Path.GetExtension(CImage.FileName), FileMode.Create);
+
+
+
+
+
+
             if (ModelState.IsValid)
             {
                 C.Status = "Active";
                 C.CreatedDate = DateTime.Now;
                 C.CreatedBy = "Admin";
-
+                C.Image = FileName;
 
                 ORM.Category.Add(C);
 

@@ -22,7 +22,7 @@ namespace L9.Controllers
         // GET: SystemUsers
         public async Task<IActionResult> Index()
         {
-            if(string.IsNullOrEmpty(HttpContext.Session.GetString("Role")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Role")))
             {
                 return RedirectToAction("Login");
             }
@@ -61,10 +61,10 @@ namespace L9.Controllers
         public IActionResult Login(string Username, string Password)
         {
 
-SystemUser LoggedInUser =             ORM.SystemUser.Where(a => a.Username == Username && a.Password == Password).FirstOrDefault();
+            SystemUser LoggedInUser = ORM.SystemUser.Where(a => a.Username == Username && a.Password == Password).FirstOrDefault();
 
 
-            if(LoggedInUser ==null)
+            if (LoggedInUser == null)
             {
                 //for custom error messaging
                 //ViewBag.Message = "Invalid Details";
@@ -74,7 +74,7 @@ SystemUser LoggedInUser =             ORM.SystemUser.Where(a => a.Username == Us
                 return View();
             }
 
-            HttpContext.Session.SetString("Role",LoggedInUser.Role);
+            HttpContext.Session.SetString("Role", LoggedInUser.Role);
             HttpContext.Session.SetString("DisplayName", LoggedInUser.DisplayName);
 
 
@@ -91,8 +91,8 @@ SystemUser LoggedInUser =             ORM.SystemUser.Where(a => a.Username == Us
         // GET: SystemUsers/Create
         public IActionResult Create()
         {
-//page leve autho.
-            if(HttpContext.Session.GetString("Role") != "Admin")
+            //page leve autho.
+            if (HttpContext.Session.GetString("Role") != "Admin")
             {
                 return RedirectToAction("UnAuthroizedAccess");
             }
