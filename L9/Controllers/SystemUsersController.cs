@@ -7,16 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using L9.Models;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.Extensions.Hosting;
+using HeyRed.Mime;
+using System.Net.Mail;
+using System.Net;
 
 namespace L9.Controllers
 {
     public class SystemUsersController : Controller
     {
         private readonly Ramadan2020Context ORM;
-
-        public SystemUsersController(Ramadan2020Context context)
+        private readonly IHostEnvironment ENV;
+        public SystemUsersController(Ramadan2020Context context, IHostEnvironment _ENV)
         {
             ORM = context;
+            ENV = _ENV;
         }
 
         // GET: SystemUsers
@@ -92,14 +98,26 @@ namespace L9.Controllers
         public IActionResult Create()
         {
             //page leve autho.
-            if (HttpContext.Session.GetString("Role") != "Admin")
-            {
-                return RedirectToAction("UnAuthroizedAccess");
-            }
+            //if (HttpContext.Session.GetString("Role") != "Admin")
+            //{
+            //    return RedirectToAction("UnAuthroizedAccess");
+            //}
 
 
             return View();
         }
+
+        public FileResult DownloadCV(string FN)
+        {
+            string FilePath = ENV.ContentRootPath + "\\wwwroot\\Docs\\CVs\\" + FN;
+           string MimeType =  MimeGuesser.GuessMimeType(FilePath);
+            //MIME Type
+
+            //FileStream FS = new FileStream();
+            return File("/Docs/CVs/"+FN,MimeType,Guid.NewGuid()+Path.GetExtension(FN));
+        }
+
+
 
         public IActionResult UnAuthroizedAccess()
         {
@@ -111,12 +129,116 @@ namespace L9.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SystemUser systemUser)
+        public async Task<IActionResult> Create(SystemUser systemUser, IFormFile UCV)
         {
+            if(UCV!=null)
+            {
+
+                //in bytes
+                if(UCV.Length > 1000)
+                {
+
+                }
+                string FolderPath = ENV.ContentRootPath + "\\wwwroot\\Docs\\CVs\\";
+                string FileName = Guid.NewGuid() + Path.GetExtension(UCV.FileName);
+                FileStream FS = new FileStream(FolderPath+ FileName, FileMode.Create); ;
+                UCV.CopyTo(FS);
+                systemUser.CV = FileName;
+            }
+
+
+
+
+
             if (ModelState.IsValid)
             {
                 ORM.Add(systemUser);
                 await ORM.SaveChangesAsync();
+
+                //send welcome email to user
+                MailMessage oEmail = new MailMessage();
+                
+                oEmail.From = new MailAddress("YOUR_EMAIL@gmail.com", "Theta Students");
+
+                oEmail.To.Add(systemUser.Email);
+                //oEmail.CC.Add("usman@thetasolutions.co.uk");
+                //oEmail.Bcc.Add("");
+
+                oEmail.Subject = "Welcome to Theta Solutions";
+
+                oEmail.Body = "<p><b>Welcome, " + systemUser.DisplayName + ",</b></p><br>" +
+
+                    "Thank you for registering your account with Theta.<br>Please find below your account details and keep it safe<br><br>" +
+
+
+                    "Username: "+systemUser.Username+"<br>"+
+                    "Password: "+systemUser.Password+
+
+                    "<br style='color:red;'>Regards,<br>" +
+                    "Support Team";
+                    
+                    ;
+
+                oEmail.IsBodyHtml = true;
+
+                if (System.IO.File.Exists("/Docs/CVs/" + systemUser.CV))
+                {
+                    oEmail.Attachments.Add(new Attachment("/Docs/CVs/" + systemUser.CV));
+                }
+
+
+                SmtpClient oSMTP = new SmtpClient();
+                oSMTP.Host = "smtp.gmail.com";
+                oSMTP.Credentials = new System.Net.NetworkCredential("YOUR_EMAIL@gmail.com", "YOUR_PASSWORD");
+                oSMTP.Port = 587; //25 465
+                oSMTP.EnableSsl = true;
+
+                try
+                {
+                    oSMTP.Send(oEmail);
+                }
+                catch(Exception Ex)
+                {
+
+                }
+
+
+                //send sms
+
+                string SMSAPIURL = "https://sendpk.com/api/sms.php?username=923037226603&password=pakistan&sender=Masking&mobile="+systemUser.Mobile+"&message=ThetaSolutions";
+
+
+                WebRequest request = HttpWebRequest.Create(SMSAPIURL);
+                WebResponse response = request.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                string urlText = reader.ReadToEnd(); // it takes the response from your url. now you can use as your need  
+                
+                if(urlText.Contains("OK"))
+                {
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 return RedirectToAction(nameof(Index));
             }
             return View(systemUser);

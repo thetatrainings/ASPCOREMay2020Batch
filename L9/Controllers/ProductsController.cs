@@ -6,16 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using L9.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.Extensions.Hosting;
 
 namespace L9.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly Ramadan2020Context _context;
+        private readonly IHostEnvironment ENV;
 
-        public ProductsController(Ramadan2020Context context)
+        public ProductsController(Ramadan2020Context context, IHostEnvironment _ENV)
         {
             _context = context;
+            ENV = _ENV;
         }
 
         // GET: Products
@@ -59,10 +64,32 @@ namespace L9.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(Product product, IList<IFormFile> PImages)
         {
+            string AllFileNames = "";
+            if (PImages !=null && PImages.Count>0)
+            {
+                
+                foreach(IFormFile PImage in PImages)
+                {
+                    string FolderPath = ENV.ContentRootPath + "\\wwwroot\\Images\\ProductImages\\";
+                    string FileName = Guid.NewGuid() + Path.GetExtension(PImage.FileName);
+                    PImage.CopyTo(new FileStream(FolderPath+FileName,FileMode.Create));
+                    AllFileNames += (FileName + ",");
+                }
+            }
+
+
+
+
             if (ModelState.IsValid)
             {
+                if (AllFileNames.Contains(','))
+                {
+                    AllFileNames = AllFileNames.Remove(AllFileNames.LastIndexOf(','));
+                }
+
+                product.Images = AllFileNames;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -147,6 +147,18 @@ namespace L9.Models
                     .HasColumnName("status")
                     .HasMaxLength(50);
 
+                entity.Property(e => e.CV)
+                   .HasColumnName("cv")
+                   .HasMaxLength(200);
+
+                entity.Property(e => e.Email)
+                   .HasColumnName("email")
+                   .HasMaxLength(200);
+
+                entity.Property(e => e.Mobile)
+                   .HasColumnName("mobile")
+                   .HasMaxLength(200);
+
             });
             OnModelCreatingPartial(modelBuilder);
         }

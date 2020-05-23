@@ -70,7 +70,24 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Images)
+
+                @{
+                    string[] FirstImage = null;
+                    if (!string.IsNullOrEmpty(item.Images))
+                    {
+                        FirstImage = item.Images.Split(',');
+                    }
+
+                }
+
+                @if (FirstImage != null)
+                {
+                    <img src="~/Images/ProductImages/@FirstImage[0]" class="img-fluid img-thumbnail" alt="" />
+                }
+                else
+                {
+                    <img src="~/Images/ProductImages/ph.jpg" alt="" class="img-fluid img-thumbnail" />
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
